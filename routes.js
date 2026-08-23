@@ -38,5 +38,25 @@ router.get('/wuensche/:id', async(req, res) => {
     }
 })
 
+// update one wunsch
+router.patch('/wuensche/:id', async(req, res) => {
+    try {
+        const wunsch = await Wunsch.findOne({ _id: req.params.id })
+
+        if (req.body.titel) wunsch.titel = req.body.titel
+        if (req.body.kategorie)  wunsch.kategorie = req.body.kategorie
+        if (req.body.preis !== undefined)     wunsch.preis = req.body.preis
+        if (req.body.link) wunsch.link = req.body.link
+        if (req.body.bildUrl) wunsch.bildUrl = req.body.bildUrl
+        if (req.body.notiz) wunsch.notiz = req.body.notiz
+
+        await Wunsch.updateOne({ _id: req.params.id }, wunsch);
+        res.send(wunsch)
+    } catch {
+        res.status(404)
+        res.send({ error: "Wunsch does not exist!" })
+    }
+});
+
 
 module.exports = router;
