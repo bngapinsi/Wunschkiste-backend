@@ -58,5 +58,17 @@ router.patch('/wuensche/:id', async(req, res) => {
     }
 });
 
+// delete one wunsch via id
+router.delete('/wuensche/:id', async(req, res) => {
+    try {
+        const result = await Wunsch.deleteOne({ _id: req.params.id })
+        res.status(204)
+        res.send()
+    } catch {
+        res.status(404)
+        res.send({ error: "Wunsch does not exist!" })
+    }
+});
+
 
 module.exports = router;
