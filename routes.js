@@ -10,7 +10,7 @@ router.get('/wuensche', async(req, res) => {
 });
 
 // post one wunsch
-router.post('/members', async(req, res) => {
+router.post('/wuensche', async(req, res) => {
     const newWunsch = new Wunsch({
         titel: req.body.titel,
         kategorie: req.body.lastname,
@@ -22,6 +22,21 @@ router.post('/members', async(req, res) => {
     await newWunsch.save();
     res.send(newWunsch);
 });
+
+// get one wunsch via id
+router.get('/wuensche/:id', async(req, res) => {
+    try {
+            const wunsch = await Wunsch.findOne({ _id: req.params.id });
+            console.log('parameter: ', req.params);
+            res.status(200)
+            res.send(wunsch);
+    } catch {
+        res.status(404);
+        res.send({
+            error: "Wunsch does not exist!"
+        });
+    }
+})
 
 
 module.exports = router;
