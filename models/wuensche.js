@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
     preis: Number,
     link: String,
     bildUrl: String,
-    notiz: String,
+    notiz: String
 }, {
     toJSON: {virtuals: true}
 });
