@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Wunsch = require('./models/wunsch');
+const User = require('./models/user');
 
 // get all wuensche
 router.get('/wuensche', async(req, res) => {
@@ -67,6 +68,33 @@ router.delete('/wuensche/:id', async(req, res) => {
     } catch {
         res.status(404)
         res.send({ error: "Wunsch does not exist!" })
+    }
+});
+
+//registrieren
+router.post('/registrieren', async(req, res) => {
+    const newUser = new User({
+        benutzername: req.body.benutzername,
+        vorname: req.body.vorname,
+        nachname: req.body.nachname,
+        passwort: req.body.passwort
+    })
+    await newUser.save();
+    res.send(newUser);
+});
+
+//anmelden
+router.post('/anmelden', async(req, res) => {
+    const user = await User.findOne({
+        benutzername: req.body.benutzername,
+        passwort: req.body.passwort
+    });
+    if (user) {
+        res.status(200);
+        res.send(user);
+    } else {
+        res.status(401);
+        res.send({ error: "Benutzername oder Passwort falsch."});
     }
 });
 
