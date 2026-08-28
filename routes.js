@@ -17,7 +17,7 @@ router.post('/wuensche', async(req, res) => {
         kategorie: req.body.lastname,
         preis: req.body.email,
         link: req.body.ipaddress,
-        bildUrl: req.body.bildUrl,
+        bildUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
         notiz: req.body.notiz
     })
     await newWunsch.save();
@@ -48,7 +48,7 @@ router.patch('/wuensche/:id', async(req, res) => {
         if (req.body.kategorie)  wunsch.kategorie = req.body.kategorie
         if (req.body.preis !== undefined)     wunsch.preis = req.body.preis
         if (req.body.link) wunsch.link = req.body.link
-        if (req.body.bildUrl) wunsch.bildUrl = req.body.bildUrl
+        if (req.file) wunsch.bildUrl = `/uploads/${req.file.filename}`
         if (req.body.notiz) wunsch.notiz = req.body.notiz
 
         await Wunsch.updateOne({ _id: req.params.id }, wunsch);
