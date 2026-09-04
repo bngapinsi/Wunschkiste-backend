@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt')
 const Wunsch = require('./models/wunsch');
 const User = require('./models/user');
+var jwt = require('jsonwebtoken');
 
 // get all wuensche
 router.get('/wuensche', async(req, res) => {
@@ -73,25 +75,48 @@ router.delete('/wuensche/:id', async(req, res) => {
 
 //registrieren
 router.post('/registrieren', async(req, res) => {
-    const newUser = new User({
+    const check = await User.findOne({ benutzername: req.body.benutzername });
+    if (check) {
+        res.status(401);
+        res.send({ error:`Benutzername ${req.body.benutzername} existiert bereits. `});
+    }
+    else {
+        const hashPasswort = await bcrypt.hash(req.body.passwort, 10);
+
+        const newUser = new User({
         benutzername: req.body.benutzername,
         vorname: req.body.vorname,
         nachname: req.body.nachname,
-        passwort: req.body.passwort
-    })
+        passwort: hashPasswort
+    });
     await newUser.save();
+    res.status(201);
     res.send(newUser);
+    }
+    
 });
 
 //anmelden
 router.post('/anmelden', async(req, res) => {
     const user = await User.findOne({
-        benutzername: req.body.benutzername,
-        passwort: req.body.passwort
+        benutzername: req.body.benutzername
     });
     if (user) {
-        res.status(200);
-        res.send(user);
+        const match = await bcrypt.compare(req.body.passwort, user.passwort);
+        if (match) {
+            const userOhnePasswort = {
+                id: user._id,
+                benutzername: user.benutzername,
+                vorname: user.vorname,
+                nachname: user.nachname
+            };
+            const token = jwt.sign(userOhnePasswort, user.benutzername);
+            res.status(200);
+            res.send({ token: token, user: userOhnePasswort});
+        } else {
+            res.status(401);
+        res.send({ error: "Benutzername oder Passwort falsch."});
+        }
     } else {
         res.status(401);
         res.send({ error: "Benutzername oder Passwort falsch."});
