@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt')
+const upload = require('./upload');
 const Wunsch = require('./models/wunsch');
 const User = require('./models/user');
 var jwt = require('jsonwebtoken');
@@ -32,7 +33,7 @@ router.get('/wuensche', async(req, res) => {
 });
 
 // post one wunsch
-router.post('/wuensche', async(req, res) => {
+router.post('/wuensche', upload.single('bild'), async(req, res) => {
         /* ------------------ check if caller is logged in    ---- start --------------------- */
     console.log('request headers: ', req.headers)
     const token = req.headers['authorization'];
@@ -97,7 +98,7 @@ router.get('/wuensche/:id', async(req, res) => {
 })
 
 // update one wunsch
-router.patch('/wuensche/:id', async(req, res) => {
+router.patch('/wuensche/:id', upload.single('bild'), async(req, res) => {
         /* ------------------ check if caller is admin    ---- start --------------------- */
     console.log('request headers: ', req.headers)
     const token = req.headers['authorization'];
