@@ -54,9 +54,9 @@ router.post('/wuensche', upload.single('bild'), async(req, res) => {
     /* ------- if caller is logged, then do the following --------------------------- */
     const newWunsch = new Wunsch({
         titel: req.body.titel,
-        kategorie: req.body.lastname,
-        preis: req.body.email,
-        link: req.body.ipaddress,
+        kategorie: req.body.kategorie,
+        preis: req.body.preis,
+        link: req.body.link,
         bildUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
         notiz: req.body.notiz
     })
