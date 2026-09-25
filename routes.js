@@ -125,7 +125,7 @@ router.patch('/wuensche/:id', upload.single('bild'), async(req, res) => {
         if (req.body.preis !== undefined)     wunsch.preis = req.body.preis
         if (req.body.link) wunsch.link = req.body.link
         if (req.file) wunsch.bildUrl = `/uploads/${req.file.filename}`
-        if (req.body.notiz) wunsch.notiz = req.body.notiz
+        if (req.body.notiz !== undefined) wunsch.notiz = req.body.notiz
 
         await Wunsch.updateOne({ _id: req.params.id }, wunsch);
         res.send(wunsch)
