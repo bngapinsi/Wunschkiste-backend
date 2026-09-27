@@ -55,6 +55,11 @@ Der Server läuft anschließend unter `http://localhost:3000`.
 
 ## Verwendung von KI-Tools
 
+- **Claude (Antrophic)**:
+- **Backend-Setup**: MongoDB-Atlas-Anbindung über Mongoose, sowie CRUD-Routen
+- **Datei-Upload für Wunschbilder**: Multer-Integration plus statisches Ausliefern der Uploads über Express
+- **Fehlersuche und Debugging**: u.a. fehlerhafte Feldzuordnungen in Backend-Routen, fehlendes Zone.js-Paket sowie fehlende FormData-Übertragung beim Bild-Upload wurden identifiziert und behoben
+
 
 
 
